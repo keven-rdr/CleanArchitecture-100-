@@ -1,6 +1,7 @@
-package br.com.alura.codechella.domain.entities.usuario;
+package br.com.alura.codechella.domain.entities;
 
 import br.com.alura.codechella.domain.Endereco;
+import br.com.alura.codechella.domain.entities.usuario.Usuario;
 
 import java.time.LocalDate;
 
@@ -12,7 +13,7 @@ public class FabricaDeUsuario {
         return this.usuario;
     }
 
-    private Usuario incluiEndereco(String cep, Integer numero, String complemento){
+    public Usuario incluiEndereco(String cep, Integer numero, String complemento){
         this.usuario.setEndereco(new Endereco(cep, numero, complemento));
         return  this.usuario;
     }
