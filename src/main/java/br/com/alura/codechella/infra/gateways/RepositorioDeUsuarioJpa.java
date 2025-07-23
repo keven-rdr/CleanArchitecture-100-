@@ -7,6 +7,7 @@ import br.com.alura.codechella.infra.persistence.UsuarioEntity;
 import br.com.alura.codechella.infra.persistence.UsuarioRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class RepositorioDeUsuarioJpa implements RepositorioDeUsuario {
@@ -31,5 +32,32 @@ public class RepositorioDeUsuarioJpa implements RepositorioDeUsuario {
         return repository.findAll().stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Usuario> buscarPorCpf(String cpf) {
+        return repository.findByCpf(cpf)
+                .map(mapper::toDomain);
+    }
+
+    @Override
+    public Usuario atualizarUsuario(Usuario usuario){
+        UsuarioEntity existente = repository.findByCpf(usuario.getCpf())
+                        .orElseThrow(() -> new RuntimeException("Usuario não encontrado"));
+
+        existente.setEmail(usuario.getEmail());
+        existente.setNome(usuario.getNome());
+        existente.setNascimento(usuario.getNascimento());
+
+        UsuarioEntity salvo = repository.save(existente);
+        return mapper.toDomain(salvo);
+    }
+
+    @Override
+    public void deletarUsuario(String cpf) {
+        UsuarioEntity existente = repository.findByCpf(cpf)
+                .orElseThrow(() -> new RuntimeException("Usuario não encontrado"));
+
+        repository.delete(existente);
     }
 }
